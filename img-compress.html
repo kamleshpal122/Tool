@@ -3,166 +3,319 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- SEO Meta Tags -->
-    <title>Online Image Compression Tool - Compress Images Easily</title>
-    <meta name="description" content="A free online tool to compress images by adjusting quality level. Optimize your images for web use.">
-    <meta name="keywords" content="image compression, optimize images, reduce image size, web tool">
-    
-    <!-- Inline CSS -->
+    <title>Image Compression Tool</title>
+    <meta name="description" content="A free online tool to compress images with customizable quality levels for faster web loading.">
+    <meta name="keywords" content="image compression, optimize images, reduce image size, web tools, free image compressor">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- Google AdSense Script (Replace ca-pub-XXXXXXXXXXXXXXXX with your Publisher ID) -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* Basic Reset */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #003366;
+            color: #FFF;
+            text-align: center;
             padding: 20px;
         }
 
-        .tool {
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
+        header h1 {
+            font-size: 2em;
         }
 
-        .ad-top, .ad-bottom {
-            width: 100%;
-            max-width: 728px;
-            margin: 10px 0;
-        }
-
-        #original-preview img, #compressed-preview img {
-            max-width: 100%;
-            height: auto;
+        header p {
             margin-top: 10px;
         }
 
-        label {
-            display: block;
-            margin: 10px 0 5px;
+        /* Main Layout with Flexbox */
+        main {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .tool-container {
+            flex: 1;
+            max-width: 600px;
+            margin: 0 20px;
+            padding: 20px;
+            background-color: #FFF;
+            border: 1px solid #E0F7FA;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .ad-left, .ad-right {
+            width: 160px;
+            background-color: #f9f9f9;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .ad-left p, .ad-right p {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        /* Tool Container Styles */
+        .tool-container h2 {
+            margin-bottom: 10px;
+            color: #003366;
+        }
+
+        #uploadBtn, #compressBtn {
+            background-color: #007BFF;
+            color: #FFF;
+            border-radius: 5px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+
+        #uploadBtn:hover, #compressBtn:hover {
+            background-color: #0056b3;
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        #quality {
+            margin: 10px 0;
+        }
+
+        #qualityValue {
+            font-size: 1.2em;
+            margin-left: 10px;
+            color: #007BFF;
+        }
+
+        #output {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .image-container {
+            text-align: center;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        img.loaded {
+            opacity: 1;
+        }
+
+        #downloadLink {
+            display: inline-block;
+            background-color: #28a745;
+            color: #FFF;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        #downloadLink:hover {
+            background-color: #218838;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #003366;
+            color: #FFF;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
         }
 
         /* Responsive Design */
-        @media (min-width: 768px) {
-            .container {
-                flex-direction: row;
-                justify-content: space-around;
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
             }
-            .tool {
-                width: 50%;
+
+            .ad-left, .ad-right {
+                width: 100%;
+                margin-bottom: 20px;
             }
-            .ad-top, .ad-bottom {
-                width: 160px;
+
+            .tool-container {
+                margin: 0;
+            }
+
+            #output {
+                flex-direction: column;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Top Advertisement -->
-        <div class="ad-top">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-            <!-- Replace 'ca-pub-XXXXXXXXXXXXXXXX' with your AdSense Publisher ID and 'YYYYYYYYYY' with your Ad Slot ID -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                 data-ad-slot="YYYYYYYYYY"
-                 data-ad-format="auto"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
+    <header>
+        <h1>Image Compression Tool</h1>
+        <p>Compress your images easily with customizable quality levels.</p>
 
-        <!-- Compression Tool -->
-        <div class="tool">
-            <h1>/tool/Ima-compress.html Tool</h1>
-            <input type="file" id="image-upload" accept="image/*">
-            <div id="original-preview"></div>
-            <label for="quality-level">Quality Level (0-100):</label>
-            <input type="range" id="quality-level" min="0" max="100" value="50">
-            <span id="quality-value">50</span>
-            <div id="loading" style="display:none;">Compressing...</div>
-            <div id="compressed-preview"></div>
-            <div id="file-info"></div>
-        </div>
+        <!-- Ad Unit 1 (Top Banner) - Replace data-ad-slot with your Ad Slot ID -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="YYYYYYYYYY"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </header>
 
-        <!-- Bottom Advertisement -->
-        <div class="ad-bottom">
-            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-            <!-- Replace 'ca-pub-XXXXXXXXXXXXXXXX' with your AdSense Publisher ID and 'ZZZZZZZZZZ' with your Ad Slot ID -->
+    <main>
+        <div class="ad-left">
+            <p>Advertisement</p>
+            <!-- Ad Unit 2 (Left Sidebar) - Replace data-ad-slot with your Ad Slot ID -->
             <ins class="adsbygoogle"
                  style="display:block"
                  data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
                  data-ad-slot="ZZZZZZZZZZ"
-                 data-ad-format="auto"></ins>
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
             <script>
                  (adsbygoogle = window.adsbygoogle || []).push({});
             </script>
         </div>
-    </div>
 
-    <!-- Image Compressor Library (loaded via CDN) -->
-    <script src="https://cdn.jsdelivr.net/npm/image-compressor.js@1.1.4/dist/image-compressor.min.js"></script>
-    
-    <!-- Inline JavaScript -->
+        <div class="tool-container">
+            <h2>Upload Image</h2>
+            <button id="uploadBtn"><i class="fas fa-upload"></i> Upload Image</button>
+            <input type="file" id="imageUpload" accept="image/*">
+
+            <h2>Select Quality Level</h2>
+            <div>
+                <label for="quality">Low</label>
+                <input type="range" id="quality" min="0" max="100" value="80">
+                <label for="quality">High</label>
+                <span id="qualityValue">80</span>
+            </div>
+
+            <button id="compressBtn"><i class="fas fa-compress"></i> Compress Image</button>
+
+            <div id="output">
+                <div class="image-container">
+                    <h3>Original Image</h3>
+                    <img id="originalImg" alt="Original uploaded image">
+                    <p id="originalSize"></p>
+                </div>
+                <div class="image-container">
+                    <h3>Compressed Image</h3>
+                    <img id="compressedImg" alt="Compressed image">
+                    <p id="compressedSize"></p>
+                    <a id="downloadLink" href="#" download="compressed.jpg"><i class="fas fa-download"></i> Download</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-right">
+            <p>Advertisement</p>
+            <!-- Ad Unit 3 (Right Sidebar) - Replace data-ad-slot with your Ad Slot ID -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                 data-ad-slot="WWWWWWWWWW"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2023 Image Compression Tool. All rights reserved.</p>
+    </footer>
+
     <script>
-        let originalFile;
-        let timeout;
+        // Trigger file upload when custom button is clicked
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            document.getElementById('imageUpload').click();
+        });
 
-        document.getElementById('image-upload').addEventListener('change', function(event) {
-            originalFile = event.target.files[0];
-            if (originalFile && originalFile.type.startsWith('image/')) {
+        // Display uploaded image and its size
+        document.getElementById('imageUpload').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const originalImage = new Image();
-                    originalImage.src = e.target.result;
-                    document.getElementById('original-preview').innerHTML = '';
-                    document.getElementById('original-preview').appendChild(originalImage);
-                    compressImage(); // Initial compression with default quality
+                    const img = document.getElementById('originalImg');
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        img.classList.add('loaded');
+                    };
+                    const size = (file.size / 1024).toFixed(2) + ' KB';
+                    document.getElementById('originalSize').textContent = 'Original Size: ' + size;
                 };
-                reader.readAsDataURL(originalFile);
+                reader.readAsDataURL(file);
             } else {
-                alert('Please upload an image file.');
+                alert('Please upload a valid image file.');
             }
         });
 
-        document.getElementById('quality-level').addEventListener('input', function() {
-            document.getElementById('quality-value').textContent = this.value;
-            clearTimeout(timeout);
-            timeout = setTimeout(compressImage, 300); // Debounce compression
+        // Update quality value display in real-time
+        document.getElementById('quality').addEventListener('input', function(event) {
+            document.getElementById('qualityValue').textContent = event.target.value;
         });
 
-        function compressImage() {
-            const qualityLevel = document.getElementById('quality-level').value / 100;
-            document.getElementById('loading').style.display = 'block';
+        // Compress image when button is clicked
+        document.getElementById('compressBtn').addEventListener('click', function() {
+            const quality = document.getElementById('quality').value / 100; // Convert to 0-1 scale
+            const img = document.getElementById('originalImg');
 
-            const compressor = new ImageCompressor();
-            compressor.compress(originalFile, {
-                quality: qualityLevel,
-                mimeType: 'image/jpeg'
-            }).then(function(compressedBlob) {
-                const compressedImg = new Image();
-                const url = URL.createObjectURL(compressedBlob);
-                compressedImg.src = url;
-                document.getElementById('compressed-preview').innerHTML = '';
-                document.getElementById('compressed-preview').appendChild(compressedImg);
+            if (img.src && img.src !== window.location.href) { // Check if an image is loaded
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = img.naturalWidth;
+                canvas.height = img.naturalHeight;
+                ctx.drawImage(img, 0, 0);
 
-                const originalSize = originalFile.size;
-                const compressedSize = compressedBlob.size;
-                document.getElementById('file-info').innerHTML = 
-                    `Original size: ${originalSize} bytes<br>Compressed size: ${compressedSize} bytes<br>` +
-                    `<a href="${url}" download="compressed_image.jpg">Download Compressed Image</a>`;
-                
-                document.getElementById('loading').style.display = 'none';
-            }).catch(function(error) {
-                console.error('Compression error:', error);
-                document.getElementById('loading').style.display = 'none';
-            });
-        }
+                // Compress image to JPEG
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                const compressedImg = document.getElementById('compressedImg');
+                compressedImg.src = compressedDataUrl;
+                compressedImg.onload = function() {
+                    compressedImg.classList.add('loaded');
+                };
+
+                // Calculate compressed image size
+                const byteString = atob(compressedDataUrl.split(',')[1]);
+                const size = (byteString.length / 1024).toFixed(2) + ' KB';
+                document.getElementById('compressedSize').textContent = 'Compressed Size: ' + size;
+
+                // Set download link
+                document.getElementById('downloadLink').href = compressedDataUrl;
+            } else {
+                alert('Please upload an image first.');
+            }
+        });
     </script>
 </body>
 </html>
