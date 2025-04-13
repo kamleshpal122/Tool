@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">ToolKit Pro - Image & Video Tools</title>
+    <meta name="description" data-i18n="meta_description" content="Free online tools for image compression, conversion, video conversion, and language translation with subtitles.">
+    <meta name="keywords" content="image compressor, image converter, video converter, video language converter, multilingual tools">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #007BFF;
+            --secondary: #28a745;
+            --background: #f5f5f5;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            --border-radius: 10px;
+            --gradient: linear-gradient(135deg, #007BFF, #28a745);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2em;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        nav {
+            margin-top: 10px;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .language-switcher {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        #languageSelect {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid var(--primary);
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Homepage */
+        .hero {
+            text-align: center;
+            padding: 50px 0;
+            background: var(--gradient);
+            color: white;
+            border-radius: var(--border-radius);
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tool-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tool-card i {
+            font-size: 2em;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* Tool Pages */
+        .converter {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .drop-area {
+            border: 2px dashed var(--primary);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .drop-area:hover, .drop-area.active {
+            background-color: rgba(0, 123, 255, 0.1);
+        }
+
+        #imageUpload, #videoUpload, #videoLangUpload {
+            display: none;
+        }
+
+        .format-selection, .language-selection {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .format-selection select, .language-selection select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--primary);
+            flex: 1;
+        }
+
+        .quality-selection {
+            margin-bottom: 20px;
+        }
+
+        #quality {
+            width: 100%;
+        }
+
+        #qualityValue {
+            font-size: 1.2em;
+            color: var(--primary);
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .output {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .image-container, .video-container {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .image-container img, .video-container video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        a[download] {
+            background-color: var(--secondary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: none;
+            margin-top: 10px;
+        }
+
+        a[download]:hover {
+            background-color: #218838;
+        }
+
+        #progressBar {
+            width: 100%;
+            height: 20px;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #progress {
+            height: 100%;
+            background-color: var(--secondary);
+            width: 0;
+            border-radius: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .output {
+                flex-direction: column;
+            }
+
+            .image-container, .video-container {
+                min-width: 100%;
+            }
+
+            .format-selection, .language-selection {
+                flex-direction: column;
+            }
+
+            .format-selection select, .language-selection select {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">ToolKit Pro</div>
+            <nav>
+                <a href="#" data-page="home">Home</a>
+                <a href="#" data-page="image-compress">Image Compressor</a>
+                <a href="#" data-page="image-convert">Image Converter</a>
+                <a href="#" data-page="video-convert">Video Converter</a>
+                <a href="#" data-page="video-lang">Video Language Converter</a>
+            </nav>
+        </div>
+    </header>
+    <div class="language-switcher container">
+        <select id="languageSelect">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+            <option value="zh">中文</option>
+            <option value="hi">हिन्दी</option>
+        </select>
+    </div>
+    <div class="container">
+        <!-- Homepage -->
+        <div class="page active" id="home">
+            <section class="hero">
+                <h1 data-i18n="home_title">Welcome to ToolKit Pro</h1>
+                <p data-i18n="home_subtitle">Your all-in-one solution for image and video processing</p>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="Search tools...">
+                </div>
+            </section>
+            <section class="tools">
+                <div class="tool-grid">
+                    <div class="tool-card" data-page="image-compress">
+                        <i class="fas fa-compress"></i>
+                        <h3 data-i18n="image_compress_title">Image Compressor</h3>
+                        <p data-i18n="image_compress_desc">Reduce image size without losing quality.</p>
+                    </div>
+                    <div class="tool-card" data-page="image-convert">
+                        <i class="fas fa-exchange-alt"></i>
+                        <h3 data-i18n="image_convert_title">Image Converter</h3>
+                        <p data-i18n="image_convert_desc">Convert images to JPEG, PNG, WebP, GIF.</p>
+                    </div>
+                    <div class="tool-card" data-page="video-convert">
+                        <i class="fas fa-video"></i>
+                        <h3 data-i18n="video_convert_title">Video Converter</h3>
+                        <p data-i18n="video_convert_desc">Convert videos to MP4, AVI, MKV, WebM.</p>
+                    </div>
+                    <div class="tool-card" data-page="video-lang">
+                        <i class="fas fa-language"></i>
+                        <h3 data-i18n="video_lang_title">Video Language Converter</h3>
+                        <p data-i18n="video_lang_desc">Add subtitles in any language (up to 1GB).</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Image Compressor -->
+        <div class="page" id="image-compress">
+            <section class="converter">
+                <h2 data-i18n="image_compress_title">Image Compressor</h2>
+                <div class="drop-area" id="compressDropArea">
+                    <p data-i18n="drop_image"><i class="fas fa-upload"></i> Drag & Drop your image or click to upload</p>
+                    <input type="file" id="imageUpload" accept="image/*">
+                </div>
+                <div class="quality-selection">
+                    <label for="quality" data-i18n="quality_label">Quality:</label>
+                    <input type="range" id="quality" min="0" max="100" value="80">
+                    <span id="qualityValue">80</span>
+                </div>
+                <button id="compressBtn" data-i18n="compress_button">Compress Image</button>
+                <div class="output">
+                    <div class="image-container">
+                        <h3 data-i18n="original_image">Original Image</h3>
+                        <img id="originalImgCompress" alt="Original image">
+                        <p id="originalSizeCompress"></p>
+                    </div>
+                    <div class="image-container">
+                        <h3 data-i18n="compressed_image">Compressed Image</h3>
+                        <img id="compressedImg" alt="Compressed image">
+                        <p id="compressedSize"></p>
+                        <a id="downloadLinkCompress" href="#" download="compressed.jpg">Download</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Image Converter -->
+        <div class="page" id="image-convert">
+            <section Hurclass="converter">
+                <h2 data-i18n="image_convert_title">Image Converter</h2>
+                <div class="drop-area" id="convertDropArea">
+                    <p data-i18n="drop_image"><i class="fas fa-upload"></i> Drag & Drop your image or click to upload</p>
+                    <input type="file" id="imageUploadConvert" accept="image/*">
+                </div>
+                <div class="format-selection">
+                    <label for="outputFormat" data-i18n="convert_to">Convert to:</label>
+                    <select id="outputFormat">
+                        <option value="image/jpeg">JPEG</option>
+                        <option value="image/png">PNG</option>
+                        <option value="image/webp">WebP</option>
+                        <option value="image/gif">GIF</option>
+                    </select>
+                </div>
+                <button id="convertImageBtn" data-i18n="convert_image_button">Convert Image</button>
+                <div class="output">
+                    <div class="image-container">
+                        <h3 data-i18n="original_image">Original Image</h3>
+                        <img id="originalImgConvert" alt="Original image">
+                        <p id="originalSizeConvert"></p>
+                    </div>
+                    <div class="image-container">
+                        <h3 data-i18n="converted_image">Converted Image</h3>
+                        <img id="convertedImg" alt="Converted image">
+                        <p id="convertedSizeConvert"></p>
+                        <a id="downloadLinkConvert" href="#" download="converted-image">Download</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Video Converter -->
+        <div class="page" id="video-convert">
+            <section class="converter">
+                <h2 data-i18n="video_convert_title">Video Converter</h2>
+                <div class="drop-area" id="videoDropArea">
+                    <p data-i18n="drop_video"><i class="fas fa-upload"></i> Drag & Drop your video or click to upload</p>
+                    <input type="file" id="videoUpload" accept="video/*">
+                </div>
+                <div class="format-selection">
+                    <label for="videoOutputFormat" data-i18n="convert_to">Convert to:</label>
+                    <select id="videoOutputFormat">
+                        <option value="mp4">MP4 (H.264)</option>
+                        <option value="webm">WebM (VP9)</option>
+                        <option value="avi">AVI (MPEG-4)</option>
+                        <option value="mkv">MKV (H.264)</option>
+                    </select>
+                </div>
+                <button id="convertVideoBtn" data-i18n="convert_video_button">Convert Video</button>
+                <div id="progressBar">
+                    <div id="progress"></div>
+                </div>
+                <div class="output">
+                    <div class="video-container">
+                        <h3 data-i18n="original_video">Original Video</h3>
+                        <video id="originalVid" controls></video>
+                        <p id="originalSizeVideo"></p>
+                    </div>
+                    <div class="video-container">
+                        <h3 data-i18n="converted_video">Converted Video</h3>
+                        <video id="convertedVid" controls></video>
+                        <p id="convertedSizeVideo"></p>
+                        <a id="downloadLinkVideo" href="#" download="converted-video">Download</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Video Language Converter -->
+        <div class="page" id="video-lang">
+            <section class="converter">
+                <h2 data-i18n="video_lang_title">Video Language Converter</h2>
+                <div class="drop-area" id="videoLangDropArea">
+                    <p data-i18n="drop_video_lang"><i class="fas fa-upload"></i> Drag & Drop your video or click to upload (Max 1GB)</p>
+                    <input type="file" id="videoLangUpload" accept="video/*">
+                </div>
+                <div class="language-selection">
+                    <label for="targetLanguage" data-i18n="target_language">Target Language for Subtitles:</label>
+                    <select id="targetLanguage">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="zh">Chinese</option>
+                        <option value="hi">Hindi</option>
+                    </select>
+                </div>
+                <button id="convertLangBtn" data-i18n="convert_lang_button">Convert Language</button>
+                <div id="progressBarLang">
+                    <div id="progressLang"></div>
+                </div>
+                <div class="output">
+                    <div class="video-container">
+                        <h3 data-i18n="original_video">Original Video</h3>
+                        <video id="originalVidLang" controls></video>
+                        <p id="originalSizeLang"></p>
+                    </div>
+                    <div class="video-container">
+                        <h3 data-i18n="converted_video_lang">Converted Video with Subtitles</h3>
+                        <video id="convertedVidLang" controls></video>
+                        <p id="convertedSizeLang"></p>
+                        <a id="downloadLinkLang" href="#" download="video-with-subtitles.mp4">Download</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/i18next@21.6.14/dist/umd/i18next.min.js"></script>
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    <script>
+        // Multilingual Support
+        i18next.init({
+            lng: 'en',
+            resources: {
+                en: {
+                    translation: {
+                        title: "ToolKit Pro - Image & Video Tools",
+                        meta_description: "Free online tools for image compression, conversion, video conversion, and language translation with subtitles.",
+                        home_title: "Welcome to ToolKit Pro",
+                        home_subtitle: "Your all-in-one solution for image and video processing",
+                        search_placeholder: "Search tools...",
+                        image_compress_title: "Image Compressor",
+                        image_compress_desc: "Reduce image size without losing quality.",
+                        image_convert_title: "Image Converter",
+                        image_convert_desc: "Convert images to JPEG, PNG, WebP, GIF.",
+                        video_convert_title: "Video Converter",
+                        video_convert_desc: "Convert videos to MP4, AVI, MKV, WebM.",
+                        video_lang_title: "Video Language Converter",
+                        video_lang_desc: "Add subtitles in any language (up to 1GB).",
+                        drop_image: "<i class='fas fa-upload'></i> Drag & Drop your image or click to upload",
+                        drop_video: "<i class='fas fa-upload'></i> Drag & Drop your video or click to upload",
+                        drop_video_lang: "<i class='fas fa-upload'></i> Drag & Drop your video or click to upload (Max 1GB)",
+                        quality_label: "Quality:",
+                        convert_to: "Convert to:",
+                        target_language: "Target Language for Subtitles:",
+                        compress_button: "Compress Image",
+                        convert_image_button: "Convert Image",
+                        convert_video_button: "Convert Video",
+                        convert_lang_button: "Convert Language",
+                        original_image: "Original Image",
+                        compressed_image: "Compressed Image",
+                        converted_image: "Converted Image",
+                        original_video: "Original Video",
+                        converted_video: "Converted Video",
+                        converted_video_lang: "Converted Video with Subtitles",
+                        invalid_image: "Please upload a valid image file.",
+                        invalid_video: "Please upload a valid video file.",
+                        size_exceeded: "File size exceeds 1GB limit.",
+                        no_file: "Please upload a file first.",
+                        conversion_failed: "Conversion failed. Please try again."
+                    }
+                },
+                es: {
+                    translation: {
+                        title: "ToolKit Pro - Herramientas de Imagen y Video",
+                        meta_description: "Herramientas gratuitas en línea para compresión de imágenes, conversión, conversión de videos y traducción de idiomas con subtítulos.",
+                        home_title: "Bienvenido a ToolKit Pro",
+                        home_subtitle: "Tu solución todo en uno para procesar imágenes y videos",
+                        search_placeholder: "Buscar herramientas...",
+                        image_compress_title: "Compresor de Imágenes",
+                        image_compress_desc: "Reduce el tamaño de la imagen sin perder calidad.",
+                        image_convert_title: "Convertidor de Imágenes",
+                        image_convert_desc: "Convierte imágenes a JPEG, PNG, WebP, GIF.",
+                        video_convert_title: "Convertidor de Videos",
+                        video_convert_desc: "Convierte videos a MP4, AVI, MKV, WebM.",
+                        video_lang_title: "Convertidor de Idioma de Video",
+                        video_lang_desc: "Añade subtítulos en cualquier idioma (hasta 1GB).",
+                        drop_image: "<i class='fas fa-upload'></i> Arrastra y suelta tu imagen o haz clic para cargar",
+                        drop_video: "<i class='fas fa-upload'></i> Arrastra y suelta tu video o haz clic para cargar",
+                        drop_video_lang: "<i class='fas fa-upload'></i> Arrastra y suelta tu video o haz clic para cargar (Máx 1GB)",
+                        quality_label: "Calidad:",
+                        convert_to: "Convertir a:",
+                        target_language: "Idioma objetivo para subtítulos:",
+                        compress_button: "Comprimir Imagen",
+                        convert_image_button: "Convertir Imagen",
+                        convert_video_button: "Convertir Video",
+                        convert_lang_button: "Convertir Idioma",
+                        original_image: "Imagen Original",
+                        compressed_image: "Imagen Comprimida",
+                        converted_image: "Imagen Convertida",
+                        original_video: "Video Original",
+                        converted_video: "Video Convertido",
+                        converted_video_lang: "Video Convertido con Subtítulos",
+                        invalid_image: "Por favor, sube un archivo de imagen válido.",
+                        invalid_video: "Por favor, sube un archivo de video válido.",
+                        size_exceeded: "El tamaño del archivo excede el límite de 1GB.",
+                        no_file: "Por favor, sube un archivo primero.",
+                        conversion_failed: "La conversión falló. Inténtalo de nuevo."
+                    }
+                },
+                fr: {
+                    translation: {
+                        title: "ToolKit Pro - Outils d'Image et de Vidéo",
+                        meta_description: "Outils gratuits en ligne pour la compression d'images, la conversion, la conversion de vidéos et la traduction de langues avec sous-titres.",
+                        home_title: "Bienvenue sur ToolKit Pro",
+                        home_subtitle: "Votre solution tout-en-un pour le traitement d'images et de vidéos",
+                        search_placeholder: "Rechercher des outils...",
+                        image_compress_title: "Compresseur d'Images",
+                        image_compress_desc: "Réduisez la taille de l'image sans perdre en qualité.",
+                        image_convert_title: "Convertisseur d'Images",
+                        image_convert_desc: "Convertissez des images en JPEG, PNG, WebP, GIF.",
+                        video_convert_title: "Convertisseur de Vidéos",
+                        video_convert_desc: "Convertissez des vidéos en MP4, AVI, MKV, WebM.",
+                        video_lang_title: "Convertisseur de Langue Vidéo",
+                        video_lang_desc: "Ajoutez des sous-titres dans n'importe quelle langue (jusqu'à 1GB).",
+                        drop_image: "<i class='fas fa-upload'></i> Glissez et déposez votre image ou cliquez pour télécharger",
+                        drop_video: "<i class='fas fa-upload'></i> Glissez et déposez votre vidéo ou cliquez pour télécharger",
+                        drop_video_lang: "<i class='fas fa-upload'></i> Glissez et déposez votre vidéo ou cliquez pour télécharger (Max 1GB)",
+                        quality_label: "Qualité :",
+                        convert_to: "Convertir en :",
+                        target_language: "Langue cible pour les sous-titres :",
+                        compress_button: "Compresser l'Image",
+                        convert_image_button: "Convertir l'Image",
+                        convert_video_button: "Convertir la Vidéo",
+                        convert_lang_button: "Convertir la Langue",
+                        original_image: "Image Originale",
+                        compressed_image: "Image Compressée",
+                        converted_image: "Image Convertie",
+                        original_video: "Vidéo Originale",
+                        converted_video: "Vidéo Convertie",
+                        converted_video_lang: "Vidéo Convertie avec Sous-titres",
+                        invalid_image: "Veuillez télécharger un fichier image valide.",
+                        invalid_video: "Veuillez télécharger un fichier vidéo valide.",
+                        size_exceeded: "La taille du fichier dépasse la limite de 1GB.",
+                        no_file: "Veuillez d'abord télécharger un fichier.",
+                        conversion_failed: "La conversion a échoué. Veuillez réessayer."
+                    }
+                },
+                de: {
+                    translation: {
+                        title: "ToolKit Pro - Bild- und Videotools",
+                        meta_description: "Kostenlose Online-Tools für Bildkompression, Konvertierung, Videokonvertierung und Sprachübersetzung mit Untertiteln.",
+                        home_title: "Willkommen bei ToolKit Pro",
+                        home_subtitle: "Ihre All-in-One-Lösung für die Bild- und Videobearbeitung",
+                        search_placeholder: "Tools suchen...",
+                        image_compress_title: "Bildkompressor",
+                        image_compress_desc: "Reduzieren Sie die Bildgröße ohne Qualitätsverlust.",
+                        image_convert_title: "Bildkonverter",
+                        image_convert_desc: "Konvertieren Sie Bilder in JPEG, PNG, WebP, GIF.",
+                        video_convert_title: "Videokonverter",
+                        video_convert_desc: "Konvertieren Sie Videos in MP4, AVI, MKV, WebM.",
+                        video_lang_title: "Videokomprimierer",
+                        video_lang_desc: "Fügen Sie Untertitel in jeder Sprache hinzu (bis zu 1GB).",
+                        drop_image: "<i class='fas fa-upload'></i> Ziehen Sie Ihr Bild hierher oder klicken Sie zum Hochladen",
+                        drop_video: "<i class='fas fa-upload'></i> Ziehen Sie Ihr Video hierher oder klicken Sie zum Hochladen",
+                        drop_video_lang: "<i class='fas fa-upload'></i> Ziehen Sie Ihr Video hierher oder klicken Sie zum Hochladen (Max. 1GB)",
+                        quality_label: "Qualität:",
+                        convert_to: "Konvertieren zu:",
+                        target_language: "Zielsprache für Untertitel:",
+                        compress_button: "Bild komprimieren",
+                        convert_image_button: "Bild konvertieren",
+                        convert_video_button: "Video konvertieren",
+                        convert_lang_button: "Sprache konvertieren",
+                        original_image: "Originalbild",
+                        compressed_image: "Komprimiertes Bild",
+                        converted_image: "Konvertiertes Bild",
+                        original_video: "Originalvideo",
+                        converted_video: "Konvertiertes Video",
+                        converted_video_lang: "Konvertiertes Video mit Untertiteln",
+                        invalid_image: "Bitte laden Sie eine gültige Bilddatei hoch.",
+                        invalid_video: "Bitte laden Sie eine gültige Videodatei hoch.",
+                        size_exceeded: "Die Dateigröße überschreitet das Limit von 1GB.",
+                        no_file: "Bitte laden Sie zuerst eine Datei hoch.",
+                        conversion_failed: "Konvertierung fehlgeschlagen. Bitte versuchen Sie es erneut."
+                    }
+                },
+                zh: {
+                    translation: {
+                        title: "ToolKit Pro - 图像和视频工具",
+                        meta_description: "免费在线工具，用于图像压缩、转换、视频转换和带字幕的语言翻译。",
+                        home_title: "欢迎体验ToolKit Pro",
+                        home_subtitle: "您处理图像和视频的多功能解决方案",
+                        search_placeholder: "搜索工具...",
+                        image_compress_title: "图像压缩器",
+                        image_compress_desc: "在不失真的情况下减小图像大小。",
+                        image_convert_title: "图像转换器",
+                        image_convert_desc: "将图像转换为JPEG、PNG、WebP、GIF。",
+                        video_convert_title: "视频转换器",
+                        video_convert_desc: "将视频转换为MP4、AVI、MKV、WebM。",
+                        video_lang_title: "视频语言转换器",
+                        video_lang_desc: "在任何语言中添加字幕（最大1GB）。",
+                        drop_image: "<i class='fas fa-upload'></i> 将您的图像拖放到此处或点击上传",
+                        drop_video: "<i class='fas fa-upload'></i> 将您的视频拖放到此处或点击上传",
+                        drop_video_lang: "<i class='fas fa-upload'></i> 将您的视频拖放到此处或点击上传（最大1GB）",
+                        quality_label: "质量：",
+                        convert_to: "转换为：",
+                        target_language: "字幕目标语言：",
+                        compress_button: "压缩图像",
+                        convert_image_button: "转换图像",
+                        convert_video_button: "转换视频",
+                        convert_lang_button: "转换语言",
+                        original_image: "原始图像",
+                        compressed_image: "压缩图像",
+                        converted_image: "转换图像",
+                        original_video: "原始视频",
+                        converted_video: "转换视频",
+                        converted_video_lang: "带字幕的转换视频",
+                        invalid_image: "请上传有效的图像文件。",
+                        invalid_video: "请上传有效的视频文件。",
+                        size_exceeded: "文件大小超过1GB限制。",
+                        no_file: "请先上传文件。",
+                        conversion_failed: "转换失败。请重试。"
+                    }
+                },
+                hi: {
+                    translation: {
+                        title: "ToolKit Pro - छवि और वीडियो उपकरण",
+                        meta_description: "छवि संपीड़न, रूपांतरण, वीडियो रूपांतरण और उपशीर्षक के साथ भाषा अनुवाद के लिए मुफ्त ऑनलाइन उपकरण।",
+                        home_title: "ToolKit Pro में आपका स्वागत है",
+                        home_subtitle: "छवि और वीडियो प्रसंस्करण के लिए आपका ऑल-इन-वन समाधान",
+                        search_placeholder: "उपकरण खोजें...",
+                        image_compress_title: "छवि संपीड़क",
+                        image_compress_desc: "गुणवत्ता खोए बिना छवि का आकार कम करें।",
+                        image_convert_title: "छवि कनवर्टर",
+                        image_convert_desc: "छवियों को JPEG, PNG, WebP, GIF में बदलें।",
+                        video_convert_title: "वीडियो कनवर्टर",
+                        video_convert_desc: "वीडियो को MP4, AVI, MKV, WebM में बदलें।",
+                        video_lang_title: "वीडियो भाषा कनवर्टर",
+                        video_lang_desc: "किसी भी भाषा में उपशीर्षक जोड़ें (1GB तक)।",
+                        drop_image: "<i class='fas fa-upload'></i> अपनी छवि को यहां ड्रैग करें या अपलोड करने के लिए क्लिक करें",
+                        drop_video: "<i class='fas fa-upload'></i> अपने वीडियो को यहां ड्रैग करें या अपलोड करने के लिए क्लिक करें",
+                        drop_video_lang: "<i class='fas fa-upload'></i> अपने वीडियो को यहां ड्रैग करें या अपलोड करने के लिए क्लिक करें (अधिकतम 1GB)",
+                        quality_label: "गुणवत्ता:",
+                        convert_to: "में परिवर्तित करें:",
+                        target_language: "उपशीर्षक के लिए लक्ष्य भाषा:",
+                        compress_button: "छवि संपीड़ित करें",
+                        convert_image_button: "छवि परिवर्तित करें",
+                        convert_video_button: "वीडियो परिवर्तित करें",
+                        convert_lang_button: "भाषा परिवर्तित करें",
+                        original_image: "मूल छवि",
+                        compressed_image: "संपीड़ित छवि",
+                        converted_image: "परिवर्तित छवि",
+                        original_video: "मूल वीडियो",
+                        converted_video: "परिवर्तित वीडियो",
+                        converted_video_lang: "उपशीर्षक के साथ परिवर्तित वीडियो",
+                        invalid_image: "कृपया एक वैध छवि फ़ाइल अपलोड करें।",
+                        invalid_video: "कृपया एक वैध वीडियो फ़ाइल अपलोड करें।",
+                        size_exceeded: "फ़ाइल का आकार 1GB की सीमा से अधिक है।",
+                        no_file: "कृपया पहले एक फ़ाइल अपलोड करें।",
+                        conversion_failed: "रूपांतरण विफल हुआ। कृपया फिर से प्रयास करें।"
+                    }
+                }
+            }
+        }, function(err, t) {
+            updateTranslations();
+        });
+
+        function updateTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(elem => {
+                elem.innerHTML = i18next.t(elem.dataset.i18n);
+            });
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(elem => {
+                elem.placeholder = i18next.t(elem.dataset.i18nPlaceholder);
+            });
+            document.title = i18next.t('title');
+            document.querySelector('meta[name="description"]').setAttribute('content', i18next.t('meta_description'));
+        }
+
+        // Language Switcher
+        document.getElementById('languageSelect').addEventListener('change', function() {
+            i18next.changeLanguage(this.value, updateTranslations);
+        });
+
+        // Page Navigation
+        const pages = document.querySelectorAll('.page');
+        document.querySelectorAll('nav a, .tool-card').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageId = link.dataset.page;
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+            });
+        });
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            document.querySelectorAll('.tool-card').forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                card.style.display = title.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+
+        // Image Compressor
+        const compressDropArea = document.getElementById('compressDropArea');
+        const imageUpload = document.getElementById('imageUpload');
+        const qualityInput = document.getElementById('quality');
+        const qualityValue = document.getElementById('qualityValue');
+        const compressBtn = document.getElementById('compressBtn');
+        const originalImgCompress = document.getElementById('originalImgCompress');
+        const compressedImg = document.getElementById('compressedImg');
+        const originalSizeCompress = document.getElementById('originalSizeCompress');
+        const compressedSize = document.getElementById('compressedSize');
+        const downloadLinkCompress = document.getElementById('downloadLinkCompress');
+
+        setupDragAndDrop(compressDropArea, imageUpload, handleImageCompress);
+        qualityInput.addEventListener('input', () => qualityValue.textContent = qualityInput.value);
+        compressBtn.addEventListener('click', compressImage);
+
+        function handleImageCompress(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    originalImgCompress.src = e.target.result;
+                    originalImgCompress.style.display = 'block';
+                    originalSizeCompress.textContent = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert(i18next.t('invalid_image'));
+            }
+        }
+
+        function compressImage() {
+            if (!originalImgCompress.src || originalImgCompress.src === window.location.href) {
+                alert(i18next.t('no_file'));
+                return;
+            }
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.src = originalImgCompress.src;
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                const quality = qualityInput.value / 100;
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                compressedImg.src = compressedDataUrl;
+                compressedImg.style.display = 'block';
+                const byteString = atob(compressedDataUrl.split(',')[1]);
+                compressedSize.textContent = `Compressed Size: ${(byteString.length / 1024).toFixed(2)} KB`;
+                downloadLinkCompress.href = compressedDataUrl;
+                downloadLinkCompress.style.display = 'inline-block';
+            };
+        }
+
+        // Image Converter
+        const convertDropArea = document.getElementById('convertDropArea');
+        const imageUploadConvert = document.getElementById('imageUploadConvert');
+        const outputFormat = document.getElementById('outputFormat');
+        const convertImageBtn = document.getElementById('convertImageBtn');
+        const originalImgConvert = document.getElementById('originalImgConvert');
+        const convertedImg = document.getElementById('convertedImg');
+        const originalSizeConvert = document.getElementById('originalSizeConvert');
+        const convertedSizeConvert = document.getElementById('convertedSizeConvert');
+        const downloadLinkConvert = document.getElementById('downloadLinkConvert');
+
+        setupDragAndDrop(convertDropArea, imageUploadConvert, handleImageConvert);
+        convertImageBtn.addEventListener('click', convertImage);
+
+        function handleImageConvert(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    originalImgConvert.src = e.target.result;
+                    originalImgConvert.style.display = 'block';
+                    originalSizeConvert.textContent = `Original Size: ${(file.size / 1024).toFixed(2)} KB`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert(i18next.t('invalid_image'));
+            }
+        }
+
+        function convertImage() {
+            if (!originalImgConvert.src || originalImgConvert.src === window.location.href) {
+                alert(i18next.t('no_file'));
+                return;
+            }
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.src = originalImgConvert.src;
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                const format = outputFormat.value;
+                const quality = format === 'image/jpeg' ? 0.8 : 1.0;
+                const convertedDataUrl = canvas.toDataURL(format, quality);
+                convertedImg.src = convertedDataUrl;
+                convertedImg.style.display = 'block';
+                const byteString = atob(convertedDataUrl.split(',')[1]);
+                convertedSizeConvert.textContent = `Converted Size: ${(byteString.length / 1024).toFixed(2)} KB`;
+                const extension = format.split('/')[1];
+                downloadLinkConvert.href = convertedDataUrl;
+                downloadLinkConvert.download = `converted-image.${extension}`;
+                downloadLinkConvert.style.display = 'inline-block';
+            };
+        }
+
+        // Video Converter
+        const ffmpeg = FFmpeg.createFFmpeg({ log: true });
+        let videoFile = null;
+
+        const videoDropArea = document.getElementById('videoDropArea');
+        const videoUpload = document.getElementById('videoUpload');
+        const videoOutputFormat = document.getElementById('videoOutputFormat');
+        const convertVideoBtn = document.getElementById('convertVideoBtn');
+        const originalVid = document.getElementById('originalVid');
+        const convertedVid = document.getElementById('convertedVid');
+        const originalSizeVideo = document.getElementById('originalSizeVideo');
+        const convertedSizeVideo = document.getElementById('convertedSizeVideo');
+        const downloadLinkVideo = document.getElementById('downloadLinkVideo');
+        const progressBar = document.getElementById('progressBar');
+        const progress = document.getElementById('progress');
+
+        setupDragAndDrop(videoDropArea, videoUpload, handleVideo);
+        convertVideoBtn.addEventListener('click', convertVideo);
+
+        function handleVideo(file) {
+            if (file && file.type.startsWith('video/')) {
+                videoFile = file;
+                const url = URL.createObjectURL(file);
+                originalVid.src = url;
+                originalVid.style.display = 'block';
+                originalSizeVideo.textContent = `Original Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+                convertedVid.style.display = 'none';
+                downloadLinkVideo.style.display = 'none';
+                convertedSizeVideo.textContent = i18next.t('converted_video') + ': N/A';
+            } else {
+                alert(i18next.t('invalid_video'));
+            }
+        }
+
+        async function convertVideo() {
+            if (!videoFile) {
+                alert(i18next.t('no_file'));
+                return;
+            }
+            if (!ffmpeg.isLoaded()) await ffmpeg.load();
+            try {
+                progressBar.style.display = 'block';
+                progress.style.width = '0%';
+                let progressValue = 0;
+                const progressInterval = setInterval(() => {
+                    progressValue = Math.min(progressValue + 10, 90);
+                    progress.style.width = `${progressValue}%`;
+                }, 500);
+                ffmpeg.FS('writeFile', 'input.mp4', await FFmpeg.fetchFile(videoFile));
+                const format = videoOutputFormat.value;
+                const codec = format === 'mp4' || format === 'mkv' ? 'libx264' : format === 'webm' ? 'libvpx-vp9' : 'mpeg4';
+                await ffmpeg.run('-i', 'input.mp4', '-c:v', codec, '-c:a', 'aac', `output.${format}`);
+                clearInterval(progressInterval);
+                progress.style.width = '100%';
+                const data = ffmpeg.FS('readFile', `output.${format}`);
+                const blob = new Blob([data.buffer], { type: `video/${format}` });
+                const url = URL.createObjectURL(blob);
+                convertedVid.src = url;
+                convertedVid.style.display = 'block';
+                convertedSizeVideo.textContent = `Converted Size: ${(blob.size / 1024 / 1024).toFixed(2)} MB`;
+                downloadLinkVideo.href = url;
+                downloadLinkVideo.download = `converted-video.${format}`;
+                downloadLinkVideo.style.display = 'inline-block';
+                ffmpeg.FS('unlink', 'input.mp4');
+                ffmpeg.FS('unlink', `output.${format}`);
+                setTimeout(() => progressBar.style.display = 'none', 1000);
+            } catch (error) {
+                alert(i18next.t('conversion_failed'));
+                progressBar.style.display = 'none';
+            }
+        }
+
+        // Video Language Converter
+        let videoLangFile = null;
+
+        const videoLangDropArea = document.getElementById('videoLangDropArea');
+        const videoLangUpload = document.getElementById('videoLangUpload');
+        const targetLanguage = document.getElementById('targetLanguage');
+        const convertLangBtn = document.getElementById('convertLangBtn');
+        const originalVidLang = document.getElementById('originalVidLang');
+        const convertedVidLang = document.getElementById('convertedVidLang');
+        const originalSizeLang = document.getElementById('originalSizeLang');
+        const convertedSizeLang = document.getElementById('convertedSizeLang');
+        const downloadLinkLang = document.getElementById('downloadLinkLang');
+        const progressBarLang = document.getElementById('progressBarLang');
+        const progressLang = document.getElementById('progressLang');
+
+        setupDragAndDrop(videoLangDropArea, videoLangUpload, handleVideoLang);
+        convertLangBtn.addEventListener('click', convertLanguage);
+
+        function handleVideoLang(file) {
+            if (file && file.type.startsWith('video/')) {
+                if (file.size > 1e9) {
+                    alert(i18next.t('size_exceeded'));
+                    return;
+                }
+                videoLangFile = file;
+                const url = URL.createObjectURL(file);
+                originalVidLang.src = url;
+                originalVidLang.style.display = 'block';
+                originalSizeLang.textContent = `Original Size: ${(file.size / 1024 / 1024).toFixed(2)} MB`;
+                convertedVidLang.style.display = 'none';
+                downloadLinkLang.style.display = 'none';
+                convertedSizeLang.textContent = i18next.t('converted_video_lang') + ': N/A';
+            } else {
+                alert(i18next.t('invalid_video'));
+            }
+        }
+
+        async function transcribeAudioMock() {
+            return {
+                text: "This is a sample video transcription.",
+                timestamps: [
+                    { start: "00:00:00,000", end: "00:00:05,000", text: "This is a sample video" },
+                    { start: "00:00:05,001", end: "00:00:10,000", text: "transcription." }
+                ]
+            };
+        }
+
+        async function translateTextMock(text, targetLang) {
+            const translations = {
+                en: text,
+                es: "Este es un ejemplo de transcripción de video.",
+                fr: "Ceci est une transcription vidéo d'exemple.",
+                de: "Dies ist eine Beispiel-Videotranskription.",
+                zh: "这是一个示例视频转录。",
+                hi: "यह एक नमूना वीडियो प्रतिलेखन है।"
+            };
+            return translations[targetLang] || text;
+        }
+
+        function generateSRT(transcription, translatedText) {
+            const lines = transcription.timestamps.map((entry, index) => {
+                return `${index + 1}\n${entry.start} --> ${entry.end}\n${translatedText.split('. ')[index] || translatedText}\n`;
+            });
+            return lines.join('\n');
+        }
+
+        async function convertLanguage() {
+            if (!videoLangFile) {
+                alert(i18next.t('no_file'));
+                return;
+            }
+            if (!ffmpeg.isLoaded()) await ffmpeg.load();
+            try {
+                progressBarLang.style.display = 'block';
+                progressLang.style.width = '0%';
+                let progressValue = 0;
+                const progressInterval = setInterval(() => {
+                    progressValue = Math.min(progressValue + 10, 90);
+                    progressLang.style.width = `${progressValue}%`;
+                }, 1000);
+                const transcription = await transcribeAudioMock();
+                progressLang.style.width = '30%';
+                const translatedText = await translateTextMock(transcription.text, targetLanguage.value);
+                progressLang.style.width = '60%';
+                const srtContent = generateSRT(transcription, translatedText);
+                ffmpeg.FS('writeFile', 'subtitles.srt', new TextEncoder().encode(srtContent));
+                ffmpeg.FS('writeFile', 'input.mp4', await FFmpeg.fetchFile(videoLangFile));
+                await ffmpeg.run('-i', 'input.mp4', '-vf', 'subtitles=subtitles.srt', '-c:v', 'libx264', '-c:a', 'aac', 'output.mp4');
+                clearInterval(progressInterval);
+                progressLang.style.width = '100%';
+                const data = ffmpeg.FS('readFile', 'output.mp4');
+                const blob = new Blob([data.buffer], { type: 'video/mp4' });
+                const url = URL.createObjectURL(blob);
+                convertedVidLang.src = url;
+                convertedVidLang.style.display = 'block';
+                convertedSizeLang.textContent = `Converted Size: ${(blob.size / 1024 / 1024).toFixed(2)} MB`;
+                downloadLinkLang.href = url;
+                downloadLinkLang.download = `video-with-subtitles-${targetLanguage.value}.mp4`;
+                downloadLinkLang.style.display = 'inline-block';
+                ffmpeg.FS('unlink', 'input.mp4');
+                ffmpeg.FS('unlink', 'subtitles.srt');
+                ffmpeg.FS('unlink', 'output.mp4');
+                setTimeout(() => progressBarLang.style.display = 'none', 1000);
+            } catch (error) {
+                alert(i18next.t('conversion_failed'));
+                console.error(error);
+                progressBarLang.style.display = 'none';
+            }
+        }
+
+        // Utility: Drag and Drop Setup
+        function setupDragAndDrop(dropArea, input, handler) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+            });
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.add('active'), false);
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => dropArea.classList.remove('active'), false);
+            });
+            dropArea.addEventListener('drop', e => handler(e.dataTransfer.files[0]), false);
+            dropArea.addEventListener('click', () => input.click(), false);
+            input.addEventListener('change', e => handler(e.target.files[0]), false);
+        }
+    </script>
+</body>
+</html>
